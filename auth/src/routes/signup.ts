@@ -1,9 +1,31 @@
-import express from 'express'
+import express, { Request, Response } from 'express'
+import { body, validationResult } from 'express-validator'
+import { DatabaseConnectionError } from '../errors/database-conn-error'
+import { RequestValidationError } from '../errors/request-validation-error'
 
 const router = express.Router()
 
-router.post('api/user/signup', (req, res) => {
-  res.send('welcome to current user')
+router.post('/api/user/signup', [
+  body('email')
+    .isEmail()
+    .withMessage('Email must be valid'),
+  body('password')
+    .trim()
+    .isLength({ min: 4, max: 20 })
+    .withMessage('Password must be betwen 4 and 20')
+], (req: Request, res: Response) => {
+
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    throw new RequestValidationError(errors.array())
+  }
+  const { email, password } = req.body
+  console.log('Crreating a user ....')
+
+  throw new DatabaseConnectionError();
+  res.send({});
+
+
 });
 
 export { router as signupRouter }
