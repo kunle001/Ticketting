@@ -7,7 +7,7 @@ spec:
   selector: 
     matchLabels:
       app: auth-mongo
-  templates:
+  template:
     metadata: 
       labels:
         app: auth-mongo
