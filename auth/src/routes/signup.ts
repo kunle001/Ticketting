@@ -1,9 +1,8 @@
 import express, { Request, Response } from 'express'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
-import { BadRequestError } from '../errors/bad-request-error'
-import { validateRequest } from '../midllewares/validate-requests'
+import { BadRequestError, validateRequest, CustomError } from '@kunleticket/common'
 import { User } from '../models/users'
 
 const router = express.Router()
@@ -24,6 +23,7 @@ router.post('/api/user/signup', [
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
+    console.log(new BadRequestError('this email in use') instanceof CustomError)
     throw new BadRequestError('this email is in use')
   };
 
