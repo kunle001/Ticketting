@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tickets
+  template: 
+    metadata:
+      labels: 
+        app: tickets
+    spec:
+      containers:
+        - name: tickets
+          image: kkunle/tickets
+          env:
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
+          - name: DB
+            valueFrom: 
+              secretKeyRef: 
+                name: database
+                key: DB
+          - name: DB_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: databasepassword
+                key: DB_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  selector:
+    app: tickets
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
