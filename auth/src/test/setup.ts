@@ -11,6 +11,11 @@ import request, { Response } from 'supertest'
 //   }
 // }
 
+declare global {
+  var signin: () => Promise<string[]>
+}
+
+
 let mongo: any
 
 beforeAll(async () => {
@@ -38,16 +43,15 @@ afterAll(async () => {
 
 });
 
-// global.signin= async ()=>{
-//   const email= 'test@test.com'
-//   const password= 'password'
+global.signin = async () => {
+  const email = 'test@test.com'
+  const password = 'password'
 
-//   const response= request(app)
-//                     .post('/api/user/signup')
-//                     .send({email,password})
-//                     .expect(201)
-//   const cookie= response.get('Set-Cookie');
+  const response = await request(app)
+    .post('/api/user/signup')
+    .send({ email, password })
+  const cookie = response.get('Set-Cookie');
 
-//   return cookie
-// }
+  return cookie
+}
 
