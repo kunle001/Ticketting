@@ -5,6 +5,9 @@ import cookieSession from "cookie-session";
 import dotenv from 'dotenv';
 import cors from 'cors'
 import { createTicketRouter } from './routes/new'
+import { showTicketRouter } from "./routes/show";
+import { IndexTicketRouter } from "./routes";
+import { updateTicketRouter } from "./routes/updateticket";
 
 import { errorHandler, NotFoundError } from '@kunleticket/common'
 
@@ -19,6 +22,9 @@ app.use(cookieSession({
 app.use(cors())
 
 app.use(createTicketRouter)
+app.use(showTicketRouter)
+app.use(IndexTicketRouter)
+app.use(updateTicketRouter)
 
 
 app.all('*', async () => {
