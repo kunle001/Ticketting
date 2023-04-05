@@ -2,14 +2,15 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose, { ConnectOptions } from 'mongoose';
 import { app } from '../app';
 import request, { Response } from 'supertest'
+import jwt from 'jsonwebtoken'
 
-// declare global {
-//   namespace NodeJS {
-//     interface Global {
-//       signin(): Promise<string[]>;
-//     }
-//   }
-// }
+declare global {
+  var signin: () => string[]
+}
+
+declare global {
+  var createTicket: () => {}
+}
 
 let mongo: any
 
@@ -38,16 +39,39 @@ afterAll(async () => {
 
 });
 
-// global.signin= async ()=>{
-//   const email= 'test@test.com'
-//   const password= 'password'
+global.signin = () => {
+  let id = new mongoose.Types.ObjectId().toHexString();
+  const payload = {
+    id,
+    email: 'test@test.com'
+  };
+  //  Create the JWT 
 
-//   const response= request(app)
-//                     .post('/api/user/signup')
-//                     .send({email,password})
-//                     .expect(201)
-//   const cookie= response.get('Set-Cookie');
+  const token = jwt.sign(payload, process.env.JWT_KEY!);
 
-//   return cookie
-// }
+  // Build Session object
+  const session = { jwt: token }
+
+  // Turn session to json
+  const sessionJSON = JSON.stringify(session)
+
+  // Take JSON and encode it as base64
+  const base64 = Buffer.from(sessionJSON).toString('base64');
+
+  //  return a string thats the cookie with encoded data
+
+  return [`session=${base64}`]
+
+};
+
+global.createTicket = () => {
+
+  return request(app).post('/api/ticket')
+    .set('Cookie', global.signin())
+    .send({
+      title: 'some show',
+      price: 300
+    })
+
+}
 
