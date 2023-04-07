@@ -16,14 +16,6 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: kkunle/ticket-client
-      context: client
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: '**/*.js'
-            dest: .
     - image: kkunle/tickets
       context: tickets
       docker:
