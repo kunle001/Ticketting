@@ -13,4 +13,4 @@ it('can fetch a list of tickets', async () => {
 
   expect(res.body.length === 3)
 
-})
+}) 
