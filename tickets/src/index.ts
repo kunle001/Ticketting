@@ -1,10 +1,8 @@
 import 'express-async-errors';
 import { ConnectOptions } from 'mongoose'
 import mongoose from "mongoose";
-import dotenv from 'dotenv'
 import { app } from './app'
 
-dotenv.config({ path: './config.env' })
 
 
 const start = async () => {
@@ -12,7 +10,7 @@ const start = async () => {
     throw new Error('no JWT_KEY')
   }
   try {
-    await mongoose.connect(process.env.DB!.replace('<password>', process.env.DB_PASSWORD!), {
+    await mongoose.connect('mongodb+srv://kunle:XIy7Y9WJm3EGjLAJ@cluster0.pt7cycb.mongodb.net/test', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     } as ConnectOptions);
@@ -21,8 +19,8 @@ const start = async () => {
   } catch (err) {
     console.log(err)
   };
-  app.listen(4000, () => {
-    console.log("Listening on port 4000");
+  app.listen(3000, () => {
+    console.log("Listening on port 3000");
   });
 };
 

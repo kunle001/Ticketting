@@ -4,7 +4,7 @@ import { NotFoundError } from "@kunleticket/common";
 
 const router = express.Router();
 
-router.get('/tickets/:id', async (req, res) => {
+router.get('/api/tickets/:id', async (req, res) => {
 
   const ticket = await Ticket.findById(req.params.id);
 
