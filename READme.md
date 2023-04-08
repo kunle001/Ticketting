@@ -10,7 +10,7 @@
 
 
 ```
-Docker, Kubernetes. 
+Docker, Kubernetes, skaffold, mongoDB, Type script, Express, NATS-Service
 ```
 ### Front end frame work
 1. in progress..
