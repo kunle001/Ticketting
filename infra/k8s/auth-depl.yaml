@@ -15,22 +15,6 @@ spec:
       containers:
         - name: auth
           image: kkunle/auth
-          env:
-          - name: JWT_KEY
-            valueFrom:
-              secretKeyRef:
-                name: jwt-secret
-                key: JWT_KEY
-          - name: DB
-            valueFrom: 
-              secretKeyRef: 
-                name: database
-                key: DB
-          - name: DB_PASSWORD
-            valueFrom: 
-              secretKeyRef:
-                name: databasepassword
-                key: DB_PASSWORD
 ---
 apiVersion: v1
 kind: Service
