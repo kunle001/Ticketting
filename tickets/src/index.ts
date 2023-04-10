@@ -10,7 +10,7 @@ const start = async () => {
     throw new Error('no JWT_KEY')
   }
   try {
-    await mongoose.connect('mongodb+srv://kunle:<pswd>@cluster0.pt7cycb.mongodb.net/test', {
+    await mongoose.connect('mongodb+srv://kunle:XIy7Y9WJm3EGjLAJ@cluster0.pt7cycb.mongodb.net/test', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     } as ConnectOptions);
