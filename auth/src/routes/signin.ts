@@ -32,7 +32,7 @@ router.post('/api/users/signin', [
   }, process.env.JWT_KEY!);
 
   // Store it on session
-  req.session = { jwt: userjwt }
+  res.cookie('secret', userjwt)
 
   res.status(200).send(user)
 });
