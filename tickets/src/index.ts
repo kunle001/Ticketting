@@ -16,7 +16,7 @@ const start = async () => {
       process.on('SIGINT', () => natsWrapper.client.close())
       process.on('SIGTERM', () => natsWrapper.client.close())
     })
-    await mongoose.connect('mongodb+srv://kunle:XIy7Y9WJm3EGjLAJ@cluster0.pt7cycb.mongodb.net/test', {
+    await mongoose.connect(process.env.DB!, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     } as ConnectOptions);

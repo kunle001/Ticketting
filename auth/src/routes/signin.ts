@@ -32,7 +32,10 @@ router.post('/api/users/signin', [
   }, process.env.JWT_KEY!);
 
   // Store it on session
-  res.cookie('secret', userjwt)
+  res.cookie('secretoken', userjwt, {
+    httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+  });
 
   res.status(200).send(user)
 });

@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { requireAuth, currentUser, validateRequest } from '@kunleticket/common';
 import { body } from 'express-validator'
 import { Ticket } from '../models/tickets';
-import { TicketCreatedPublisher } from '../publisher/ticket-created-publisher';
+import { TicketCreatedPublisher } from '../events/publisher/ticket-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
 

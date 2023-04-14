@@ -37,7 +37,10 @@ router.post('/api/users/signup', [
   }, process.env.JWT_KEY!);
 
   // Store it on session
-  req.session = { jwt: userjwt }
+  res.cookie('secretoken', userjwt, {
+    httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+  });
 
   res.status(201).send(user)
 

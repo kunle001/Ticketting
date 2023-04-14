@@ -3,7 +3,8 @@ import { json } from "body-parser";
 import 'express-async-errors';
 import cookieSession from "cookie-session";
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 
 import { currentUserRouter } from './routes/current-user'
@@ -20,6 +21,7 @@ app.use(cookieSession({
   signed: false,
   // secure: true,
 }));
+app.use(cookieParser())
 app.use(cors())
 
 app.use(currentUserRouter);
