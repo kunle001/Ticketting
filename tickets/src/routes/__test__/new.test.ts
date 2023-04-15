@@ -1,6 +1,10 @@
 import request from "supertest";
-import { app } from "../app";
-import { Ticket } from '../models/tickets'
+import { app } from "../../app";
+import { Ticket } from '../../models/tickets'
+import { natsWrapper } from "../../nats-wrapper";
+
+
+
 
 
 it('has a route handler listening to /api/tickets for posts requests', async () => {
@@ -73,5 +77,16 @@ it('check if a ticket was saved to DB', async () => {
 })
 it('returns an error if an invalid price is provided', async () => {
 
+
+});
+
+it('publishes an event', async () => {
+  await request(app).post('/api/tickets').set('Cookie', global.signin()).send({
+    title: 'when funaab worships',
+    price: 3
+  }).expect(201);
+
+  console.log(natsWrapper)
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
 
 })

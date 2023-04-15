@@ -15,7 +15,7 @@ class NatsWraper {
 
     return new Promise<void>((resolve, reject) => {
       this._client!.on('connect', () => {
-        console.log('connected to NAS')
+        console.log('connected to NATS')
         resolve();
       });
       this._client!.on('error', (err) => {

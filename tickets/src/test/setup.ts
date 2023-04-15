@@ -12,9 +12,12 @@ declare global {
   var createTicket: () => {}
 }
 
+jest.mock('../nats-wrapper')
+
 let mongo: any
 
 beforeAll(async () => {
+  jest.clearAllMocks()
   mongo = new MongoMemoryServer();
   await mongo.start()
   const mongoUri = mongo.getUri()
@@ -24,6 +27,7 @@ beforeAll(async () => {
     useUnifiedTopology: true,
   } as ConnectOptions)
 });
+
 
 beforeEach(async () => {
   const collections = await mongoose.connection.db.collections();
@@ -60,7 +64,7 @@ global.signin = () => {
 
   //  return a string thats the cookie with encoded data
 
-  return [`session=${base64}`]
+  return [`secretoken=${token}`]
 
 };
 

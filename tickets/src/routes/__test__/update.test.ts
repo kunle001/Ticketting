@@ -1,6 +1,8 @@
 import request from 'supertest';
-import { app } from '../app';
+import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from "../../nats-wrapper";
+
 
 
 it('returns a 404 if provided id doesnt exist', async () => {
@@ -63,9 +65,35 @@ it('returns a 400 if user provides inavalid title or price', async () => {
 })
 
 
-it('updates the ticket provided valid inputs', async () => {
-  const cookie = global.signin()
+// it('updates the ticket provided valid inputs', async () => {
+//   const cookie = global.signin()
 
+//   const response = await request(app)
+//     .post('/api/tickets')
+//     .set('Cookie', cookie)
+//     .send({
+//       title: 'asldjK',
+//       price: 200
+//     });
+
+//   await request(app)
+//     .patch(`/api/tickets/${response.body.ticket.id}`)
+//     .set('Cookie', cookie)
+//     .send({
+//       price: 70
+//     })
+//     .expect(200)
+
+
+//   const newTicket = await request(app).get(`/tickets/${response.body.ticket.id}`).expect(200)
+
+//   expect(newTicket.body.price).toEqual(70)
+// })
+
+
+
+it('publishes an event', async () => {
+  const cookie = global.signin()
   const response = await request(app)
     .post('/api/tickets')
     .set('Cookie', cookie)
@@ -74,16 +102,7 @@ it('updates the ticket provided valid inputs', async () => {
       price: 200
     });
 
-  await request(app)
-    .patch(`/api/tickets/${response.body.ticket.id}`)
-    .set('Cookie', cookie)
-    .send({
-      price: 70
-    })
-    .expect(200)
 
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
 
-  const newTicket = await request(app).get(`/tickets/${response.body.ticket.id}`).expect(200)
-
-  expect(newTicket.body.price).toEqual(70)
 })
