@@ -4,6 +4,8 @@ import { body } from 'express-validator';
 import mongoose from 'mongoose';
 import { Ticket } from '../model/ticket';
 import { Order } from '../model/order';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 const EXPIRATION_WINDOW_SECONDS = 15 * 60
@@ -19,7 +21,7 @@ router.post('/api/orders', currentUser, requireAuth, [
   const { ticketId } = req.body
   // Find ticket in the DB
   const ticket = await Ticket.findById(ticketId)
-  if (!ticket) throw new NotFoundError();
+  if (!ticket) throw new NotFoundError('ticket not found');
 
   // MAke sure that this ticket is not already resrved
   // RUn query to look at all orders. Find an Order where the ticket 
@@ -46,7 +48,19 @@ router.post('/api/orders', currentUser, requireAuth, [
 
   await order.save();
 
-  res.status(200).send(order)
+  //publish
+  new OrderCreatedPublisher(natsWrapper.client).publish({
+    id: order.id,
+    status: order.status,
+    userId: order.userId,
+    expiresAt: order.expiresAt.toISOString(),
+    ticket: {
+      id: ticket.id,
+      price: ticket.price
+    }
+  })
+
+  res.status(201).send(order)
 });
 
 export { router as createOrderRouter }
