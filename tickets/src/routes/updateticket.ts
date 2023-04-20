@@ -19,7 +19,7 @@ router.patch('/api/tickets/:id', currentUser, requireAuth, [
   })
 
   if (!ticket) {
-    throw new NotFoundError();
+    throw new NotFoundError('ticket is not found');
   };
   if (req.currentUser!.id !== ticket.userId) {
     throw new NotAUthorizedError()
@@ -30,6 +30,7 @@ router.patch('/api/tickets/:id', currentUser, requireAuth, [
     title: ticket.title,
     price: ticket.price,
     userId: ticket.userId,
+    version: ticket.version
   })
 
   res.send(ticket)

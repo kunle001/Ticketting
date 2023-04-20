@@ -28,7 +28,7 @@ app.use(updateTicketRouter)
 
 
 app.all('*', async () => {
-  throw new NotFoundError()
+  throw new NotFoundError('page not found')
 })
 
 app.use(errorHandler);
