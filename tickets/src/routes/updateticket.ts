@@ -13,27 +13,36 @@ router.patch('/api/tickets/:id', currentUser, requireAuth, [
     .isFloat({ gt: 0 })
     .withMessage('must be a number greater than 0')
 ], validateRequest, async (req: Request, res: Response) => {
-  const ticket = await Ticket.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  })
+  const ticket = await Ticket.findById(req.params.id)
 
   if (!ticket) {
-    throw new NotFoundError('ticket is not found');
-  };
-  if (req.currentUser!.id !== ticket.userId) {
-    throw new NotAUthorizedError()
+    throw new NotFoundError('Ticket not found');
   }
 
-  new TicketUpdatedPublisher(natsWrapper.client).publish({
+  // if (ticket.orderId) {
+  //   throw new BadRequestError('Cannot edit a reserved ticket');
+  // }
+
+  if (ticket.userId !== req.currentUser!.id) {
+    throw new NotAUthorizedError();
+  }
+
+  ticket.set({
+    title: req.body.title,
+    price: req.body.price
+  });
+
+  await ticket.save();
+
+  await new TicketUpdatedPublisher(natsWrapper.client).publish({
     id: ticket.id,
     title: ticket.title,
     price: ticket.price,
     userId: ticket.userId,
     version: ticket.version
-  })
+  });
 
-  res.send(ticket)
+  res.send(ticket);
 });
 
 export { router as updateTicketRouter }

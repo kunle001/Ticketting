@@ -1,33 +1,43 @@
-import { currentUser, requireAuth, NotAUthorizedError, NotFoundError, OrderStatus } from '@kunleticket/common';
-import express, { Request, Response } from 'express'
-import { Order } from '../model/order';
+import express, { Request, Response } from 'express';
+import {
+  requireAuth,
+  NotFoundError,
+  NotAUthorizedError,
+} from '@kunleticket/common';
+import { Order, OrderStatus } from '../model/order';
 import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
 import { natsWrapper } from '../nats-wrapper';
-import { Ticket } from '../model/ticket';
 
 const router = express.Router();
 
-router.delete('/api/orders/:orderId', currentUser, requireAuth, async (req: Request, res: Response) => {
-  const order = await Order.findById(req.params.orderId).populate('ticket')
+router.delete(
+  '/api/orders/:orderId',
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const { orderId } = req.params;
 
-  if (!order) throw new NotFoundError('no order found')
+    const order = await Order.findById(orderId).populate('ticket');
 
-  if (order.userId !== req.currentUser!.id) throw new NotAUthorizedError()
-
-  order.status = OrderStatus.Cancelled
-
-  await order.save()
-
-  //publish an event saying this was cancelled
-  new OrderCancelledPublisher(natsWrapper.client).publish({
-    id: order.id,
-    ticket: {
-      id: order.ticket.id
+    if (!order) {
+      throw new NotFoundError('no order found');
     }
-  })
+    if (order.userId !== req.currentUser!.id) {
+      throw new NotAUthorizedError();
+    }
+    order.status = OrderStatus.Cancelled;
+    await order.save();
 
+    // publishing an event saying this was cancelled!
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      version: order.version,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
 
-  res.status(204).send(order)
-});
+    res.status(204).send(order);
+  }
+);
 
-export { router as deleteOrderRouter }
+export { router as deleteOrderRouter };
