@@ -7,7 +7,8 @@ it('fetches the order', async () => {
   // Create a ticket
   const ticket = Ticket.build({
     title: 'concert',
-    price: 23
+    price: 23,
+    id: new mongoose.Types.ObjectId().toHexString()
   });
 
   await ticket.save()
@@ -38,7 +39,8 @@ it("dosen't allow a user to fetch other users orders", async () => {
   // Create a ticket
   const ticket = Ticket.build({
     title: 'concert',
-    price: 23
+    price: 23,
+    id: new mongoose.Types.ObjectId().toHexString()
   });
 
   await ticket.save()
