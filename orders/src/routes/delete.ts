@@ -3,6 +3,7 @@ import {
   requireAuth,
   NotFoundError,
   NotAUthorizedError,
+  currentUser,
 } from '@kunleticket/common';
 import { Order, OrderStatus } from '../model/order';
 import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.delete(
   '/api/orders/:orderId',
+  currentUser,
   requireAuth,
   async (req: Request, res: Response) => {
     const { orderId } = req.params;
@@ -21,6 +23,7 @@ router.delete(
     if (!order) {
       throw new NotFoundError('no order found');
     }
+
     if (order.userId !== req.currentUser!.id) {
       throw new NotAUthorizedError();
     }
