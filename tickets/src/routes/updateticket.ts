@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { NotAUthorizedError, NotFoundError, currentUser, requireAuth, validateRequest } from '@kunleticket/common';
+import { BadRequestError, NotAUthorizedError, NotFoundError, currentUser, requireAuth, validateRequest } from '@kunleticket/common';
 import { Ticket } from '../models/tickets';
 import { TicketUpdatedPublisher } from '../events/publisher/ticket-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
@@ -19,9 +19,9 @@ router.patch('/api/tickets/:id', currentUser, requireAuth, [
     throw new NotFoundError('Ticket not found');
   }
 
-  // if (ticket.orderId) {
-  //   throw new BadRequestError('Cannot edit a reserved ticket');
-  // }
+  if (ticket.orderId) {
+    throw new BadRequestError('Ticket is Reserved, cannot edit it')
+  }
 
   if (ticket.userId !== req.currentUser!.id) {
     throw new NotAUthorizedError();
