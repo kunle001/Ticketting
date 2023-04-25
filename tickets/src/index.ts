@@ -3,6 +3,8 @@ import { ConnectOptions } from 'mongoose'
 import mongoose from "mongoose";
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 
 
 
@@ -20,9 +22,16 @@ const start = async () => {
       process.env.NATS_URL
     )
     natsWrapper.client.on('close', () => {
-      process.on('SIGINT', () => natsWrapper.client.close())
-      process.on('SIGTERM', () => natsWrapper.client.close())
-    })
+      console.log('NATS connection closed!')
+      process.exit();
+    });
+
+    process.on('SIGINT', () => natsWrapper.client.close())
+    process.on('SIGTERM', () => natsWrapper.client.close());
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
+
     await mongoose.connect(process.env.DB!, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
