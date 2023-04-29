@@ -3,7 +3,7 @@ import { app } from '../../app';
 
 it('returns a 201 on sucessful signup', async () => {
   return request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@email.com",
       password: "password"
@@ -13,7 +13,7 @@ it('returns a 201 on sucessful signup', async () => {
 
 it('returns a 400 with invalid email', async () => {
   return request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "testtest.com",
       password: "password"
@@ -23,7 +23,7 @@ it('returns a 400 with invalid email', async () => {
 
 it('returns a 400 with invalid pawword', async () => {
   return request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@test.com",
       password: "p"
@@ -33,14 +33,14 @@ it('returns a 400 with invalid pawword', async () => {
 
 it('returns a 400 if missing email and password', async () => {
   return request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({})
     .expect(400)
 })
 
 it('disapllows existing email', async () => {
   await request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@test.com",
       password: "password"
@@ -48,7 +48,7 @@ it('disapllows existing email', async () => {
     .expect(201)
 
   await request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@test.com",
       password: "password"
@@ -59,7 +59,7 @@ it('disapllows existing email', async () => {
 
 it('returns a 201 on sucessful signup', async () => {
   const response = await request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@test.com",
       password: "password"

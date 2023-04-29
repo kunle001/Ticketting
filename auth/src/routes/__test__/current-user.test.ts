@@ -3,11 +3,10 @@ import { app } from "../../app";
 
 
 it('should respond with details about the current user', async () => {
-  const cookie = await global.signin()
 
   const response = await request(app)
-    .get('/api/user/currentuser')
-    .set('Cookie', cookie)
+    .get('/api/users/currentuser')
+    .set('Cookie', global.signin())
     .expect(200)
 
   expect(response.body.email).toEqual('test@test.com');
@@ -15,6 +14,6 @@ it('should respond with details about the current user', async () => {
 
 it('responds with null if not authenticated', async () => {
   const response = await request(app)
-    .get('/api/user/currentuser')
+    .get('/api/users/currentuser')
     .expect(401)
 })

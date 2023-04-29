@@ -5,7 +5,7 @@ import { requireAuth } from "@kunleticket/common";
 
 const router = express.Router()
 
-router.get('/api/user/currentUser', currentUser, requireAuth, (req, res) => {
+router.get('/api/users/currentUser', currentUser, requireAuth, (req, res) => {
   res.send(req.currentUser)
 
 });
