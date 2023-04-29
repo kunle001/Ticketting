@@ -10,7 +10,6 @@ import { PaymentCreatedListener } from './events/listeners/payments-created-list
 
 
 const start = async () => {
-  console.log('starting up...')
   if (!process.env.JWT_KEY) {
     throw new Error('no JWT_KEY')
   }
