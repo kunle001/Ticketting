@@ -10,6 +10,7 @@ import { OrderCreatedListener } from './events/listeners/order-created-listener'
 
 
 const start = async () => {
+  console.log('starting up..')
   if (!process.env.NATS_URL) throw new Error('provide nats url')
   if (!process.env.NATS_CLIENT_ID) throw new Error('provide nats client_id ')
   if (!process.env.NATS_CLUSTER_ID) throw new Error('provide nats cluster_id')
