@@ -5,7 +5,7 @@ import { app } from '../../app';
 
 it('returns a 400 if user doesnt exist on DB', async () => {
   return request(app)
-    .post('/api/user/signin')
+    .post('/api/users/signin')
     .send({
       email: "test@test.com",
       password: "password"
@@ -16,7 +16,7 @@ it('returns a 400 if user doesnt exist on DB', async () => {
 it('returns a 200 on sucessful sigin', async () => {
 
   await request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@test.com",
       password: "password"
@@ -24,7 +24,7 @@ it('returns a 200 on sucessful sigin', async () => {
     .expect(201)
 
   const response = await request(app)
-    .post('/api/user/signin')
+    .post('/api/users/signin')
     .send({
       email: "test@test.com",
       password: "password"
@@ -36,7 +36,7 @@ it('returns a 200 on sucessful sigin', async () => {
 it('should fail, given wrong password', async () => {
 
   await request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@test.com",
       password: "password"
@@ -44,7 +44,7 @@ it('should fail, given wrong password', async () => {
     .expect(201)
 
   await request(app)
-    .post('/api/user/signin')
+    .post('/api/users/signin')
     .send({
       email: "test@test.com",
       password: "password11"

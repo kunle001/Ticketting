@@ -4,14 +4,14 @@ import { app } from '../../app';
 
 it('should return a 200, for sucessfully logging out', async () => {
   await request(app)
-    .post('/api/user/signup')
+    .post('/api/users/signup')
     .send({
       email: "test@test.com",
       password: "password"
     })
     .expect(201)
   const response = await request(app)
-    .get('/api/user/signout')
+    .get('/api/users/signout')
     .expect(200)
   expect(response.get("Set-Cookie")).toBeDefined()
 
