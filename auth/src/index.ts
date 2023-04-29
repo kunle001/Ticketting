@@ -8,7 +8,6 @@ dotenv.config({ path: './config.env' })
 
 
 const start = async () => {
-  console.log('starting up......')
   if (!process.env) {
     throw new Error('no JWT_KEY')
   }
