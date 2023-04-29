@@ -8,6 +8,7 @@ import { IndexTicketRouter } from "./routes";
 import { updateTicketRouter } from "./routes/updateticket";
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
+import cors from 'cors'
 
 import { errorHandler, NotFoundError } from '@kunleticket/common'
 
@@ -19,7 +20,8 @@ app.use(cookieSession({
   signed: false,
   // secure: true,
 }));
-app.use(cookieParser())
+app.use(cookieParser());
+app.use(cors())
 
 app.use(createTicketRouter)
 app.use(showTicketRouter)

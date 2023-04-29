@@ -2,7 +2,8 @@ import express from "express";
 import { json } from "body-parser";
 import 'express-async-errors';
 import cookieSession from "cookie-session";
-import cookieParser from 'cookie-parser'
+import cookieParser from 'cookie-parser';
+import cors from 'cors'
 import { deleteOrderRouter } from "./routes/delete";
 import { createOrderRouter } from "./routes/new";
 import { indexOrderRouter } from "./routes";
@@ -20,7 +21,8 @@ app.use(cookieSession({
   signed: false,
   // secure: true,
 }));
-app.use(cookieParser())
+app.use(cookieParser());
+app.use(cors())
 app.use(deleteOrderRouter)
 app.use(indexOrderRouter)
 app.use(createOrderRouter)
