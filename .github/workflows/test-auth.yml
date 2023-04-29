@@ -5,13 +5,7 @@ on:
   
 jobs: 
   build: 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: cd auth && npm ci && npm run test:ci -- --only-essential
+      - run: cd auth && npm install && npm run test:ci
