@@ -38,6 +38,7 @@ const ticketSchema = new mongoose.Schema(
       type: Number
     }
   },
+
   {
     toJSON: {
       transform(doc, ret) {
