@@ -1,6 +1,8 @@
 import express from "express";
 import { Ticket } from "../models/tickets";
 import { NotFoundError } from "@kunleticket/common";
+import { TicketUpdatedPublisher } from "../events/publisher/ticket-updated-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -11,6 +13,18 @@ router.get('/api/tickets/:id', async (req, res) => {
   if (!ticket) {
     throw new NotFoundError('ticket not found');
   }
+
+  ticket.set({
+    viewsCount: ticket.viewsCount + 1
+  });
+
+  await new TicketUpdatedPublisher(natsWrapper.client).publish({
+    id: ticket.id,
+    title: ticket.title,
+    price: ticket.price,
+    userId: ticket.userId,
+    version: ticket.version
+  });
 
   const { title, price } = ticket;
 
