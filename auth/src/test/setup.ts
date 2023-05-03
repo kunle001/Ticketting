@@ -16,6 +16,7 @@ declare global {
 let mongo: any
 
 beforeAll(async () => {
+  process.env.JWT_KEY = 'kunle'
   mongo = new MongoMemoryServer();
   await mongo.start()
   const mongoUri = mongo.getUri()

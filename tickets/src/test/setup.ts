@@ -30,6 +30,7 @@ beforeAll(async () => {
 
 
 beforeEach(async () => {
+  process.env.JWT_KEY = 'kunle'
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {

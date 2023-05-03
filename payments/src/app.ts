@@ -4,6 +4,7 @@ import 'express-async-errors';
 import cookieSession from "cookie-session";
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
+import cors from 'cors'
 
 import { currentUser, errorHandler, NotFoundError } from '@kunleticket/common'
 import { createChargeRouter } from "./routes/new";
@@ -17,6 +18,7 @@ app.use(cookieSession({
   // secure: true,
 }));
 app.use(cookieParser());
+app.use(cors())
 app.use(currentUser)
 
 app.use(createChargeRouter);
