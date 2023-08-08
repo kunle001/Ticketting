@@ -38,6 +38,7 @@ kind: Service
 metadata:
   name: orders-srv
 spec:
+  type: LoadBalancer
   selector:
     app: orders
   ports:
